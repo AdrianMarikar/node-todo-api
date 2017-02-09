@@ -52,16 +52,38 @@ if (!ObjectID.isValid(id)) {
 	return res.status(404).send();
 }
 
-Todo.findById(id).then((todo) => {
-	if (!todo) {
-		return res.status(404).send();
-	}
-		res.send({todo});
-}).catch((e) => {
-	res.status(400).send();
+	Todo.findById(id).then((todo) => {
+		if (!todo) {
+			return res.status(404).send();
+		}
+			res.send({todo});
+	}).catch((e) => {
+		res.status(400).send();
+	});
 });
 
+app.delete('/todos/:id', (req, res) => {
+	// get the id
+	var id = req.params.id;
 
+	// validate the id -> not valid? Return a 404
+	if (!ObjectID.isValid(id)) {
+	return res.status(404).send();
+}
+	//Remove todo by id
+		//success
+			//if no doc, send 404
+			//if doc, send doc back with a 200
+	Todo.findByIdAndRemove(id).then((todo) => {
+	if (!todo) {
+			return res.status(404).send();
+		}
+			res.send({todo});
+	}).catch((e) => {
+		//error
+		//400 with empty body
+		res.status(400).send();
+	});
 });
 
 app.listen(port, () => {
