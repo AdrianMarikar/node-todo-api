@@ -138,17 +138,6 @@ app.get('/users/me', authenticate, (req, res) => {
 });
 
 
-// POST /users/login
-// Make post request - {email, password}
-// Need to try and find a user who
-	// 1. has an email matching the email sent in
-	// 2. has a hash password that equals the plain text password. bcrypt compare.
-//Set up the route.
-// Pick off the email and password from the request body.
-// verify that the res.send send back the body data.
-// fire up server. make the log in call in postman. Make sure 
-// you get the email and password back.
-
 app.post('/users/login', (req, res) => {
 	var body = _.pick(req.body, ['email', 'password']);
 
@@ -161,6 +150,14 @@ app.post('/users/login', (req, res) => {
 	});
 });
 
+
+app.delete('/users/me/token', authenticate, (req, res) => {
+	req.user.removeToken(req.token).then(() => {
+		res.status(200).send();
+	}), () => {
+		res.status(400).send();
+	}
+});
 
 app.listen(port, () => {
 	console.log(`Started up at port ${port}`);
